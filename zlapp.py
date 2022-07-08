@@ -1,6 +1,9 @@
 # The original code is from https://github.com/FDUCSLG/pafd-automated
 # The following has been optimized
 
+# The python program has been packaged to an app
+# with reference to: https://zhuanlan.zhihu.com/p/162237978
+
 import time
 import os
 import logging
