@@ -27,5 +27,4 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     
       - name: run
-        run: STD_ID=${{ secrets.STD_ID }} PASSWORD=${{ secrets.PASSWORD }} python3 zlapp.py
-        
+        run: FUDAN_ID=${{ secrets.FUDAN_ID }} FUDAN_PASSWORD=${{ secrets.FUDAN_PASSWORD }} python zlapp.py
