@@ -33,12 +33,12 @@ def get_account(output = print):
     fudan_password = os.getenv("FUDAN_PASSWORD")
     pushplus_token = os.getenv("PUSHPLUS_TOKEN")
     if fudan_id is not None and fudan_password is not None:
-        output("Have obtained id and password from the environmental variables.")
+        output("Have obtained account information from the environmental variables.")
         return fudan_id, fudan_password, pushplus_token
 
     # The second way to get account: from the file
     if os.path.exists("account.txt"):
-        output("Read the id and password from account.txt.")
+        output("Read the account information from account.txt.")
         with open("account.txt", "r") as account_file:
             text = account_file.readlines()
 
@@ -49,7 +49,7 @@ def get_account(output = print):
 
     else:  # The third way to get account: input
         output("account.txt not found.")
-        output("Please input the following information:")
+        output("Please input the following account information:")
 
         fudan_id = input("Fudan UIS ID: ")
         fudan_password = getpass("Fudan UIS Password: ")
