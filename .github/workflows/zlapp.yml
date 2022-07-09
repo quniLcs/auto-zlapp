@@ -2,9 +2,9 @@ name: zlapp
 
 on:
   push:
-    branches: [ master ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ master ]
+    branches: [ "main" ]
   schedule:
     - cron:  '0 2 * * *'
   workflow_dispatch:
@@ -23,4 +23,4 @@ jobs:
           pip install -r requirements.txt
     
       - name: run zlapp
-      - run: FUDAN_ID=${{ secrets.FUDAN_ID }} FUDAN_PASSWORD=${{ secrets.FUDAN_PASSWORD }} python zlapp.py
+        run: python zlapp.py
