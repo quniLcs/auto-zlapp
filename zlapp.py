@@ -1,8 +1,13 @@
 # The original code is from https://github.com/FDUCSLG/pafd-automated
 # The following has been optimized
 
-# The python program has been packaged to an app
-# with reference to: https://zhuanlan.zhihu.com/p/162237978
+# The log file can be sent to WeChat by PushPlus with reference to:
+# https://github.com/DullSword/GLaDOS-CheckIn
+# https://github.com/tyIceStream/GLaDOS_Checkin
+
+# The python program has been packaged to an app with reference to:
+# https://zhuanlan.zhihu.com/p/162237978
+
 
 import time
 import os
@@ -19,52 +24,52 @@ import io
 import numpy
 from PIL import Image, ImageEnhance
 
-from requests import adapters, session
+import requests
 
 
 def get_account(output = print):
     # The first way to get account: from the environment variables
-    uid = os.getenv("FUDAN_ID")
-    psw = os.getenv("FUDAN_PASSWORD")
-    if uid is not None and psw is not None:
+    fudan_id = os.getenv("FUDAN_ID")
+    fudan_password = os.getenv("FUDAN_PASSWORD")
+    pushplus_token = os.getenv("PUSHPLUS_TOKEN")
+    if fudan_id is not None and fudan_password is not None:
         output("Have obtained id and password from the environmental variables.")
-        return uid, psw
+        return fudan_id, fudan_password, pushplus_token
 
     # The second way to get account: from the file
     if os.path.exists("account.txt"):
         output("Read the id and password from account.txt.")
-        with open("account.txt", "r") as file:
-            text = file.readlines()
+        with open("account.txt", "r") as account_file:
+            text = account_file.readlines()
 
-        if text[0][:4] != "ID: " or len(text[0]) < 10:
-            output("Error in account.txt.")
-            exit()
-
-        uid = text[0].split()[1].strip()
-        psw = text[1].split()[1].strip()
-        return uid, psw
+        fudan_id = text[0].split()[1].strip()
+        fudan_password = text[1].split()[1].strip()
+        pushplus_token = text[2].split()[1].strip()
+        return fudan_id, fudan_password, pushplus_token
 
     else:  # The third way to get account: input
         output("account.txt not found.")
-        output('Please input the id and password.')
+        output("Please input the following information:")
 
-        uid = input("ID: ")
-        psw = getpass("PASSWORD: ")
+        fudan_id = input("Fudan UIS ID: ")
+        fudan_password = getpass("Fudan UIS Password: ")
+        pushplus_token = input("PushPlus Token:")
 
-        with open("account.txt", "w") as file:
-            file.write("ID: %s\nPASSWORD: %s\n" % (uid, psw))
+        with open("account.txt", "w") as account_file:
+            account_file.write("FUDAN_ID: %s\nFUDAN_PASSWORD: %s\nPUSHPLUS_TOKEN: %s\n" %
+                               (fudan_id, fudan_password, pushplus_token))
 
         output("account.txt saved.")
         output("Please pay attention to the safety of the file.")
         output("A hyperlink to desktop is recommended.")
 
-        return uid, psw
+        return fudan_id, fudan_password, pushplus_token
 
 
 def read_captcha(image):
-    reader = easyocr.Reader(['en'])
+    reader = easyocr.Reader(["en"])
 
-    image = Image.open(io.BytesIO(image)).convert('L')
+    image = Image.open(io.BytesIO(image)).convert("L")
     image = ImageEnhance.Brightness(image).enhance(factor = 1.5)
     image = numpy.array(image)
 
@@ -82,15 +87,19 @@ def read_captcha(image):
 
 class Fudan:
     # built a session with the server
-    def __init__(self, uid, psw, login_url = 'https://uis.fudan.edu.cn/authserver/login', output = print):
+    def __init__(self, fudan_id, fudan_password, pushplus_token,
+                 login_url = "https://uis.fudan.edu.cn/authserver/login",
+                 log_file = '', output = print):
         # the default value of url_login includes no service
 
-        self.uid = uid
-        self.psw = psw
+        self.fudan_id = fudan_id
+        self.fudan_password = fudan_password
+        self.pushplus_token = pushplus_token
         self.login_url = login_url
+        self.log_file = log_file
         self.output = output
 
-        self.session = session()
+        self.session = requests.session()
 
     def login_init(self):
         # check if the login page is open
@@ -113,7 +122,7 @@ class Fudan:
     def login(self):
         login_page_text = self.login_init()
 
-        data = {"username": self.uid, "password": self.psw,
+        data = {"username": self.fudan_id, "password": self.fudan_password,
                 "service": "https://zlapp.fudan.edu.cn/site/ncov/fudanDaily"}
         data.update(re.findall(r'<input type="hidden" name="([a-zA-Z0-9\-_]+)" value="([a-zA-Z0-9\-_]+)"/?>',
                                login_page_text))
@@ -133,30 +142,51 @@ class Fudan:
 
     def logout(self):
         self.output("Start to log out.")
-        logout_url = 'https://uis.fudan.edu.cn/authserver/logout?service=/authserver/login'
+        logout_url = "https://uis.fudan.edu.cn/authserver/logout?service=/authserver/login"
         logout_page = self.session.get(logout_url)
 
-        if '01-Jan-1970' in logout_page.headers.get('Set-Cookie'):
+        if "01-Jan-1970" in logout_page.headers.get("Set-Cookie"):
             self.output("Successfully log out.")
             self.output('')
         else:
             self.output("Exception arises when logging out.")
             self.output('')
 
+    def send(self):
+        with open(self.log_file, "r") as log_file:
+            content = log_file.read()
+
+        data = {"channel": "wechat", "token": self.pushplus_token,
+                "title": "Auto-Zlapp Log File", "content": content}
+
+        self.output('')
+        self.output("Start to send message.")
+        send_post = requests.post("https://www.pushplus.plus/send", data = data)
+        send_json = send_post.json()
+
+        if send_json["code"] == 200:
+            self.output("Successfully send message.")
+        else:
+            self.output("Fail to send Message")
+
     def close(self):
-        # log out and close the session
+        # log out, close the session and send message
 
         self.logout()
+
         self.session.close()
         self.output("Session closed.")
 
-        exit()
+        if log_file:
+            self.send()
+
+        quit()
 
 
 class Zlapp(Fudan):
     def check(self):
         self.output("Start to check the Fudan zlapp.")
-        zlapp_page = self.session.get('https://zlapp.fudan.edu.cn/ncov/wap/fudan/get-info')
+        zlapp_page = self.session.get("https://zlapp.fudan.edu.cn/ncov/wap/fudan/get-info")
         zlapp_all_info = zlapp_page.json()
 
         zlapp_date = zlapp_all_info["d"]["info"]["date"]
@@ -166,13 +196,9 @@ class Zlapp(Fudan):
         self.output("Last submit area: %s." % zlapp_last_area)
 
         if zlapp_last_area != "其他国家":
-            zlapp_position = zlapp_all_info["d"]["info"]['geo_api_info']
+            zlapp_position = zlapp_all_info["d"]["info"]["geo_api_info"]
             zlapp_position = loads(zlapp_position)
-            self.output("Last submit address: %s." % zlapp_position['formattedAddress'])
-
-        # Adapt the time zone
-        # os.environ['TZ'] = 'Asia/Shanghai'
-        # time.tzset()
+            self.output("Last submit address: %s." % zlapp_position["formattedAddress"])
 
         today_date = time.strftime("%Y%m%d", time.localtime())
         self.output("Today's date: %s." % today_date)
@@ -197,7 +223,7 @@ class Zlapp(Fudan):
             self.output("The captcha is: %s." % code)
             self.zlapp_last_info.update({"code": code})
 
-            submit_post = self.session.post('https://zlapp.fudan.edu.cn/ncov/wap/fudan/save',
+            submit_post = self.session.post("https://zlapp.fudan.edu.cn/ncov/wap/fudan/save",
                                             data = self.zlapp_last_info, allow_redirects = False)
 
             submit_result = loads(submit_post.text)
@@ -208,25 +234,25 @@ class Zlapp(Fudan):
         self.output('')
 
 
-if __name__ == '__main__':
-    adapters.DEFAULT_RETRIES = 5
-
-    log_path = 'logs/'
+if __name__ == "__main__":
+    log_path = "logs/"
     if not os.path.exists(log_path):
         os.makedirs(log_path)
 
     logging.basicConfig(level = logging.INFO)
-    log_file = 'logs/%s.log' % time.strftime('%Y%m%d%H%M', time.localtime())
-    log_handler = logging.FileHandler(log_file, mode = 'w')
-    log_formatter = logging.Formatter("%(asctime)s - %(filename)s[line:%(lineno)d]: %(message)s")
+    log_file = "logs/%s.log" % time.strftime("%Y%m%d%H%M", time.localtime())
+    log_handler = logging.FileHandler(log_file, mode = "w")
+    log_formatter = logging.Formatter("%(asctime)s: %(message)s")
     log_handler.setFormatter(log_formatter)
     logger = logging.getLogger(__name__)
     logger.addHandler(log_handler)
 
-    uid, psw = get_account(output = logger.info)
-    login_url = 'https://uis.fudan.edu.cn/authserver/login?service=https://zlapp.fudan.edu.cn/site/ncov/fudanDaily'
+    fudan_id, fudan_password, pushplus_token = get_account(output = logger.info)
+    login_url = "https://uis.fudan.edu.cn/authserver/login?service=https://zlapp.fudan.edu.cn/site/ncov/fudanDaily"
 
-    zlapp = Zlapp(uid, psw, login_url = login_url, output = logger.info)
+    zlapp = Zlapp(fudan_id, fudan_password, pushplus_token,
+                  login_url = login_url, log_file = log_file, output = logger.info)
+
     zlapp.login()
     zlapp.check()
     zlapp.submit()

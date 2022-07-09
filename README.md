@@ -20,6 +20,8 @@ The original code is from https://github.com/FDUCSLG/pafd-automated, while the c
 
 - `requests`: to manage the webpage.
 
+- 
+
 ## User Installation
 
 ### GitHub Action (Recommended)
@@ -34,6 +36,7 @@ The original code is from https://github.com/FDUCSLG/pafd-automated, while the c
    | ------ | ---------------- | ------------------------ |
    | 1      | `FUDAN_ID`       | One's Fudan UIS ID       |
    | 2      | `FUDAN_PASSWORD` | One's Fudan UIS Password |
+   | 3      | `PUSHPLUS_TOKEN` | One's PushPlus Token     |
 
 4. Then GitHub Action will help one to zlapp according to history information at a set time every day.
 
