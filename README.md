@@ -38,7 +38,7 @@ The original code is from https://github.com/FDUCSLG/pafd-automated, while the c
    | 2      | `FUDAN_PASSWORD` | One's Fudan UIS Password |
    | 3      | `PUSHPLUS_TOKEN` | One's PushPlus Token     |
 
-4. Then GitHub Action will help one to zlapp according to history information at a set time every day.
+4. Then GitHub Action will help one to zlapp according to history information at 10 a.m. every day.
 
 ### Windows10 Trigger (Not Recommended)
 
