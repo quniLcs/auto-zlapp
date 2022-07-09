@@ -22,7 +22,22 @@ The original code is from https://github.com/FDUCSLG/pafd-automated, while the c
 
 ## User Installation
 
-### Windows10 Trigger (Recommended)
+### GitHub Action (Recommended)
+
+1. Fork this repo;
+
+2. In one's own repo, follow `Setting`, `Secrets`, `Actions`;
+
+3. Create 2 new secrets, which will be keep confidential by GitHub;
+
+   | Number | Name             | Value                    |
+   | ------ | ---------------- | ------------------------ |
+   | 1      | `FUDAN_ID`       | One's Fudan UIS ID       |
+   | 2      | `FUDAN_PASSWORD` | One's Fudan UIS Password |
+
+4. Then GitHub Action will help one to zlapp according to history information at a set time every day.
+
+### Windows10 Trigger (Not Recommended)
 
 First, convert the python script to a executable file using the following command:
 
@@ -45,20 +60,3 @@ After building the trigger, there are several things one may confirm:
 
 - whether the trigger can always run, instead of just when the computer is in charge;
 - whether one have the privilege to run a trigger, with reference to the [link](https://blog.csdn.net/SmileLvCha/article/details/119563178) or to the Windows official website.
-
-### GitHub Action (Unfinished)
-
-As is described in 'Attention' part, users had better follow the original [instruction](https://github.com/FDUCSLG/pafd-automated), or there's a **uncompleted** and simple summary here:
-
-1. Fork this repo;
-
-2. In one's own repo, follow `Setting`, `Secrets`, `Actions`;
-
-3. Create 2 new secrets, which will be keep confidential by GitHub;
-
-   | Number | Name             | Value                    |
-   | ------ | ---------------- | ------------------------ |
-   | 1      | `FUDAN_ID`       | One's Fudan UIS ID       |
-   | 2      | `FUDAN_PASSWORD` | One's Fudan UIS Password |
-
-4. Then GitHub Action will help one to zlapp according to history information at a set time every day, but this step should be done by oneself.
