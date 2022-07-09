@@ -46,10 +46,6 @@ After building the trigger, there are several things one may confirm:
 - whether the trigger can always run, instead of just when the computer is in charge;
 - whether one have the privilege to run a trigger, with reference to the [link](https://blog.csdn.net/SmileLvCha/article/details/119563178) or to the Windows official website.
 
-Actually this trigger will still work even when the computer shutdown
-
-[很多人不知道 Win10 关机后，电脑还会继续运行_腾讯新闻 (qq.com)](https://new.qq.com/omn/20210426/20210426A0AW1M00.html)
-
 ### GitHub Action (Unfinished)
 
 As is described in 'Attention' part, users had better follow the original [instruction](https://github.com/FDUCSLG/pafd-automated), or there's a **uncompleted** and simple summary here:
