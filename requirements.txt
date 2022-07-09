@@ -1,5 +1,4 @@
-py2exe~=0.11.1.1
 easyocr~=1.5.0
-numpy~=1.22.2
-Pillow~=9.0.1
-requests~=2.27.1
+numpy~=1.23.1
+Pillow~=9.2.0
+requests~=2.28.1
