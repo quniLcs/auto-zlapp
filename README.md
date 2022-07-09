@@ -27,7 +27,7 @@ The original code is from https://github.com/FDUCSLG/pafd-automated, while the c
 
 2. In one's own repo, follow `Setting`, `Secrets`, `Actions`;
 
-3. Create 3 new secrets, which will be keep confidential by GitHub;
+3. Create 3 new secrets, which will be kept confidential by GitHub;
 
    | Number | Name             | Value                    |
    | ------ | ---------------- | ------------------------ |
