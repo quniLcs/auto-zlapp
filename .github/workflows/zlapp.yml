@@ -22,4 +22,8 @@ jobs:
           pip install -r requirements.txt
     
       - name: run zlapp
-        run: FUDAN_ID=${{ secrets.FUDAN_ID }} FUDAN_PASSWORD=${{ secrets.FUDAN_PASSWORD }} python zlapp.py
+        env:
+          FUDAN_ID: ${{ secrets.FUDAN_ID }}
+          FUDAN_PASSWORD: ${{ secrets.FUDAN_PASSWORD }}
+          PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
+        run: python zlapp.py
