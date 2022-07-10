@@ -53,7 +53,7 @@ def get_account(output = print):
 
         fudan_id = input("Fudan UIS ID: ")
         fudan_password = getpass("Fudan UIS Password: ")
-        pushplus_token = input("PushPlus Token:")
+        pushplus_token = input("PushPlus Token: ")
 
         with open("account.txt", "w") as account_file:
             account_file.write("FUDAN_ID: %s\nFUDAN_PASSWORD: %s\nPUSHPLUS_TOKEN: %s\n" %
