@@ -40,11 +40,11 @@ def get_account(output = print):
     if os.path.exists("account.txt"):
         output("Read the account information from account.txt.")
         with open("account.txt", "r") as account_file:
-            text = account_file.readlines()
+            account_text = account_file.readlines()
 
-        fudan_id = text[0].split()[1].strip()
-        fudan_password = text[1].split()[1].strip()
-        pushplus_token = text[2].split()[1].strip()
+        fudan_id = account_text[0].split()[1]
+        fudan_password = account_text[1].split()[1]
+        pushplus_token = account_text[2].split()[1]
         return fudan_id, fudan_password, pushplus_token
 
     else:  # The third way to get account: input
