@@ -32,7 +32,7 @@ def get_account(output = print):
     fudan_id = os.getenv("FUDAN_ID")
     fudan_password = os.getenv("FUDAN_PASSWORD")
     pushplus_token = os.getenv("PUSHPLUS_TOKEN")
-    if fudan_id is not None and fudan_password is not None:
+    if fudan_id is not None and fudan_password is not None and pushplus_token is not None:
         output("Have obtained account information from the environmental variables.")
         return fudan_id, fudan_password, pushplus_token
 
