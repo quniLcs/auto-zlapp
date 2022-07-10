@@ -90,7 +90,7 @@ class Fudan:
     def __init__(self, fudan_id, fudan_password, pushplus_token,
                  login_url = "https://uis.fudan.edu.cn/authserver/login",
                  log_file = '', output = print):
-        # the default value of url_login includes no service
+        # the default value of login_url includes no service
 
         self.fudan_id = fudan_id
         self.fudan_password = fudan_password
