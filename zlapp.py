@@ -33,7 +33,7 @@ def get_account(output = print):
     fudan_password = os.getenv("FUDAN_PASSWORD")
     pushplus_token = os.getenv("PUSHPLUS_TOKEN")
     if fudan_id is not None and fudan_password is not None and pushplus_token is not None:
-        output("Have obtained account information from the environmental variables.")
+        output("Have obtained account information from the environment variables.")
         return fudan_id, fudan_password, pushplus_token
 
     # The second way to get account: from the file
@@ -235,8 +235,8 @@ class Zlapp(Fudan):
 
 
 if __name__ == "__main__":
-    os.environ["TZ"] = "Asia/Shanghai"
-    time.tzset()
+    # os.environ["TZ"] = "Asia/Shanghai"
+    # time.tzset()
 
     log_path = "logs/"
     if not os.path.exists(log_path):
