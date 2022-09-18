@@ -235,8 +235,8 @@ class Zlapp(Fudan):
 
 
 if __name__ == "__main__":
-    # os.environ["TZ"] = "Asia/Shanghai"
-    # time.tzset()
+    os.environ["TZ"] = "Asia/Shanghai"
+    time.tzset()
 
     log_path = "logs/"
     if not os.path.exists(log_path):
