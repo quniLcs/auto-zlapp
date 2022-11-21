@@ -21,6 +21,7 @@ import io
 import numpy
 from PIL import Image, ImageEnhance
 
+import ssl
 import requests
 
 
@@ -183,6 +184,7 @@ class Fudan:
 class Zlapp(Fudan):
     def check(self):
         self.output("Start to check the Fudan zlapp.")
+        ssl._create_default_https_context = ssl._create_unverified_context
         zlapp_page = self.session.get("https://zlapp.fudan.edu.cn/ncov/wap/fudan/get-info", verify = False)
         zlapp_all_info = zlapp_page.json()
 
