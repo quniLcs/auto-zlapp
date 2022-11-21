@@ -5,9 +5,6 @@
 # https://github.com/DullSword/GLaDOS-CheckIn
 # https://github.com/tyIceStream/GLaDOS_Checkin
 
-# The python program has been packaged to an app with reference to:
-# https://zhuanlan.zhihu.com/p/162237978
-
 
 import time
 import os
@@ -186,7 +183,7 @@ class Fudan:
 class Zlapp(Fudan):
     def check(self):
         self.output("Start to check the Fudan zlapp.")
-        zlapp_page = self.session.get("https://zlapp.fudan.edu.cn/ncov/wap/fudan/get-info")
+        zlapp_page = self.session.get("https://zlapp.fudan.edu.cn/ncov/wap/fudan/get-info", verify = False))
         zlapp_all_info = zlapp_page.json()
 
         zlapp_date = zlapp_all_info["d"]["info"]["date"]
