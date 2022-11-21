@@ -183,7 +183,7 @@ class Fudan:
 class Zlapp(Fudan):
     def check(self):
         self.output("Start to check the Fudan zlapp.")
-        zlapp_page = self.session.get("https://zlapp.fudan.edu.cn/ncov/wap/fudan/get-info", verify = False))
+        zlapp_page = self.session.get("https://zlapp.fudan.edu.cn/ncov/wap/fudan/get-info", verify = False)
         zlapp_all_info = zlapp_page.json()
 
         zlapp_date = zlapp_all_info["d"]["info"]["date"]
@@ -232,8 +232,8 @@ class Zlapp(Fudan):
 
 
 if __name__ == "__main__":
-    os.environ["TZ"] = "Asia/Shanghai"
-    time.tzset()
+    # os.environ["TZ"] = "Asia/Shanghai"
+    # time.tzset()
 
     log_path = "logs/"
     if not os.path.exists(log_path):
