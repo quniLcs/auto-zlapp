@@ -18,10 +18,9 @@ jobs:
       
       - name: install dependencies
         run: |
-          sudo apt-get install ca-certificates
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install -U requests[security]
+          pip install opencv-python==4.5.4.60
+          pip install easyocr pillow numpy
     
       - name: run zlapp
         env:
